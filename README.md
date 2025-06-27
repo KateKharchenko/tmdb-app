@@ -2,6 +2,10 @@
 
 A modern web application built with Nuxt 3 and Vue 3 that allows users to browse trending movies and TV shows, view details, and bookmark their favorites. The app uses The Movie Database (TMDB) API for content and Supabase for authentication and bookmark storage.
 
+## Live Demo
+
+[View Live Demo](https://tmdb-app-ruby.vercel.app)
+
 ## Features
 
 - Browse trending movies and TV shows
@@ -107,6 +111,44 @@ yarn dev
 pnpm dev
 ```
 
+## Project Structure
+
+```
+├── components/         # Vue components
+│   ├── AuthModal.vue   # Authentication modal component
+│   ├── Bookmark.vue    # Bookmark button component
+│   ├── Header.vue      # App header with navigation
+│   ├── Loader.vue      # Loading spinner component
+│   └── MediaCard.vue   # Media item card component
+├── composables/        # Vue composables
+│   └── useBookmarks.js # Bookmarks state management
+├── pages/              # Application pages
+│   ├── bookmarks.vue   # User bookmarks page
+│   ├── index.vue       # Root redirect to trending
+│   └── trending/       # Trending media pages
+├── public/             # Static assets
+├── utils/              # Utility functions
+│   └── supabase.js     # Supabase client singleton
+├── .env               # Environment variables (create from .env.example)
+└── nuxt.config.ts     # Nuxt configuration
+```
+
+## Features
+
+### Authentication
+
+The app uses Supabase for authentication. Users can:
+- Register with email and password
+- Log in with existing credentials
+- Log out from the application
+
+### Bookmarking
+
+Authenticated users can:
+- Bookmark movies and TV shows
+- View all their bookmarks in the bookmarks page
+- Remove bookmarks with a single click
+
 ## Production
 
 Build the application for production:
@@ -115,14 +157,11 @@ Build the application for production:
 # npm
 npm run build
 
-# pnpm
-pnpm build
-
 # yarn
 yarn build
 
-# bun
-bun run build
+# pnpm
+pnpm build
 ```
 
 Locally preview production build:
