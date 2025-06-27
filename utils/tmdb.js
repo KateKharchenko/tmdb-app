@@ -40,35 +40,20 @@ export const fetchFromTMDB = async (endpoint, params = {}) => {
 }
 
 /**
- * Get trending movies
+ * Get trending media (movies or TV shows)
+ * @param {string} mediaType - Type of media ('movie' or 'tv')
  * @param {string} timeWindow - Time window for trending (day or week)
  * @param {number} page - Page number for pagination
  * @returns {Promise<Object>} - Object containing results array and pagination info
  */
-export const getTrendingMovies = async (timeWindow = 'week', page = 1) => {
-  try {
-    const data = await fetchFromTMDB(`trending/movie/${timeWindow}`, { page })
-    return {
-      results: data.results || [],
-      page: data.page || 1,
-      totalPages: data.total_pages || 0,
-      totalResults: data.total_results || 0
-    }
-  } catch (error) {
-    console.error('Error fetching trending movies:', error)
-    throw error
+export const getTrending = async (mediaType = 'movie', timeWindow = 'week', page = 1) => {
+  // Validate mediaType parameter
+  if (!['movie', 'tv'].includes(mediaType)) {
+    throw new Error('Invalid media type. Must be "movie" or "tv"');
   }
-}
-
-/**
- * Get trending TV shows
- * @param {string} timeWindow - Time window for trending (day or week)
- * @param {number} page - Page number for pagination
- * @returns {Promise<Object>} - Object containing results array and pagination info
- */
-export const getTrendingTVShows = async (timeWindow = 'week', page = 1) => {
+  
   try {
-    const data = await fetchFromTMDB(`trending/tv/${timeWindow}`, { page })
+    const data = await fetchFromTMDB(`trending/${mediaType}/${timeWindow}`, { page })
     return {
       results: data.results || [],
       page: data.page || 1,
@@ -76,7 +61,7 @@ export const getTrendingTVShows = async (timeWindow = 'week', page = 1) => {
       totalResults: data.total_results || 0
     }
   } catch (error) {
-    console.error('Error fetching trending TV shows:', error)
+    console.error(`Error fetching trending ${mediaType}:`, error)
     throw error
   }
 }

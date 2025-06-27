@@ -58,7 +58,7 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue';
-import { getTrendingMovies, getTrendingTVShows } from '~/utils/tmdb';
+import { getTrending } from '~/utils/tmdb';
 import Loader from '~/components/Loader.vue';
 import Pagination from '~/components/Pagination.vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -131,15 +131,15 @@ useHead({
   ]
 });
 
-// Server-side data fetching for initial page load
+// Server-side data fetching for initial page load using unified getTrending method
 const { data: moviesData } = await useAsyncData(
-  'trending-movies',
+  'trending-movies-unified',
   async () => {
     try {
       const page = currentPage.value;
       const tab = activeTab.value;
       if (tab === 'movies') {
-        return await getTrendingMovies('week', page);
+        return await getTrending('movie', 'week', page);
       }
       return { results: [], page: 1, totalPages: 0, totalResults: 0 };
     } catch (err) {
@@ -152,13 +152,13 @@ const { data: moviesData } = await useAsyncData(
 );
 
 const { data: tvShowsData } = await useAsyncData(
-  'trending-tvshows',
+  'trending-tvshows-unified',
   async () => {
     try {
       const page = currentPage.value;
       const tab = activeTab.value;
       if (tab === 'tv') {
-        return await getTrendingTVShows('week', page);
+        return await getTrending('tv', 'week', page);
       }
       return { results: [], page: 1, totalPages: 0, totalResults: 0 };
     } catch (err) {
@@ -200,13 +200,13 @@ const currentPagination = computed(() => {
   return activeTab.value === 'movies' ? pagination.value.movies : pagination.value.tv;
 });
 
-// Methods for client-side data fetching after initial load
+// Methods for client-side data fetching after initial load using unified getTrending function
 const fetchTrendingMovies = async (page = currentPage.value) => {
   loading.value = true;
   error.value = null;
   
   try {
-    const data = await getTrendingMovies('week', page);
+    const data = await getTrending('movie', 'week', page);
     trendingMovies.value = data.results;
     pagination.value.movies = {
       page: data.page,
@@ -226,7 +226,7 @@ const fetchTrendingTVShows = async (page = currentPage.value) => {
   error.value = null;
   
   try {
-    const data = await getTrendingTVShows('week', page);
+    const data = await getTrending('tv', 'week', page);
     trendingTVShows.value = data.results;
     pagination.value.tv = {
       page: data.page,
